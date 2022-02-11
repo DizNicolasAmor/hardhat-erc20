@@ -1,31 +1,21 @@
-const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { name, symbol, initialSupply } = require("../deploy/deploySettings");
+const { name, symbol, initialSupply } = require("../scripts/deploySettings");
 
 describe("MyToken", function () {
-  [deployer, user] = await ethers.getSigners();
-  let accounts;
-  // let deployer;
-  let account1;
   let token;
+  let deployer, user;
 
-  before(async function () {
-    accounts = await web3.eth.getAccounts();
-    deployer = accounts[0];
-    account1 = accounts[1];
+  before(async () => {
+    [deployer, user] = await ethers.getSigners();
+
+    const MyToken = await hre.ethers.getContractFactory("MyToken");
+    token = await MyToken.deploy(name, symbol, initialSupply);
+
+    await token.deployed();
   });
 
   describe("Deployment", function () {
     it("Should deploy with the right params", async function () {
-      const MyToken = await ethers.getContractFactory(
-        name,
-        symbol,
-        initialSupply
-      );
-      const myToken = await MyToken.deploy(initialSupply);
-
-      await myToken.deployed();
-
       assert.equal(await token.name(), settings.name);
       assert.equal(await token.symbol(), settings.symbol);
       assert.equal(await token.decimals(), settings.decimals);
@@ -53,7 +43,7 @@ describe("MyToken", function () {
 
     it("Should mint failed", async function () {
       try {
-        await token.mint(account1, 100, { from: account1 });
+        await token.mint(user, 100, { from: user });
       } catch (err) {
         return;
       }
@@ -61,15 +51,15 @@ describe("MyToken", function () {
     });
 
     it("Should transfer successfully", async function () {
-      await token.transfer(account1, 10);
+      await token.transfer(user, 10);
       assert.equal(await token.balanceOf(deployer), 90);
-      assert.equal(await token.balanceOf(account1), 10);
+      assert.equal(await token.balanceOf(user), 10);
       assert.equal(await token.totalSupply(), 100);
     });
 
     it("Should transfer failed", async function () {
       try {
-        await token.transfer(account1, 100);
+        await token.transfer(user, 100);
       } catch (err) {
         return;
       }
