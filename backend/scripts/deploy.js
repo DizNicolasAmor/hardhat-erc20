@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
-const { name, symbol, initialSupply } = require("deploySettings");
+const { name, symbol, initialSupply } = require("./deploySettings");
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -16,18 +16,22 @@ async function main() {
 
   // We get the contract to deploy
   const MyToken = await hre.ethers.getContractFactory("MyToken");
-  const contractInstance = await MyToken.deploy(name, symbol, initialSupply);
+  const token = await MyToken.deploy(name, symbol, initialSupply);
 
   console.log("Deploying Token...");
-  await contractInstance.deployed();
+  await token.deployed();
 
-  console.log("MyToken deployed to:", contractInstance.address);
+  console.log("MyToken deployed to:", token.address);
 
-  console.log('Token name: "%s"' % contractInstance.name());
-  console.log('Token symbol: "%s"' % contractInstance.symbol());
-  console.log('Total supply: "%s"' % contractInstance.totalSupply());
+  const tokenName = await token.name();
+  const tokenSymbol = await token.symbol();
+  const tokenTotalSupply = await token.totalSupply();
 
-  return contractInstance;
+  console.log(`Token name: ${tokenName}`);
+  console.log(`Token symbol: ${tokenSymbol}`);
+  console.log(`Total supply: ${tokenTotalSupply}`);
+
+  return token;
 }
 
 // We recommend this pattern to be able to use async/await everywhere
