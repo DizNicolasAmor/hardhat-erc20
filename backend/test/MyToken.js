@@ -23,28 +23,30 @@ describe("MyToken", function () {
     });
   });
 
-  describe("Interactive", function () {
-    /*
-    it("Should mint successfully", async function () {
-      await token.mint(deployer, 100);
-      expect(await token.balanceOf(deployer)).to.equal(100);
-      expect(await token.totalSupply()).to.equal(100);
+  describe("Interactions", function () {
+    it("Assigns initial balance", async () => {
+      expect(await token.balanceOf(deployer.address)).to.equal(initialSupply);
     });
 
-    it("Should mint failed", async function () {
-      try {
-        await token.mint(user, 100, { from: user });
-      } catch (err) {
-        return;
-      }
-      expect.fail("Should mint failed");
+    it("Transfer emits event", async () => {
+      await expect(token.transfer(user.address, 7))
+        .to.emit(token, "Transfer")
+        .withArgs(deployer.address, user.address, 7);
     });
 
-    it("Should transfer successfully", async function () {
-      await token.transfer(user, 10);
-      expect(await token.balanceOf(deployer)).to.equal(90);
-      expect(await token.balanceOf(user)).to.equal(10);
-      expect(await token.totalSupply()).to.equal(100);
+    it("Can not transfer above the amount", async () => {
+      await expect(
+        token.transfer(deployer.address, initialSupply.add(1))
+      ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    });
+
+    it("Send transaction changes receiver balance", async () => {
+      await expect(() =>
+        deployer.sendTransaction({
+          to: user.address,
+          value: 200,
+        })
+      ).to.changeBalance(user, 200);
     });
 
     it("Should transfer failed", async function () {
@@ -55,21 +57,5 @@ describe("MyToken", function () {
       }
       expect.fail("Should transfer failed");
     });
-
-    it("Should burn successfully", async function () {
-      await token.burn(10);
-      expect(await token.balanceOf(deployer)).to.equal(80);
-      expect(await token.totalSupply()).to.equal(90);
-    });
-
-    it("Should burn failed", async function () {
-      try {
-        await token.burn(100);
-      } catch (err) {
-        return;
-      }
-      expect.fail("Should burn failed");
-    });
-  */
   });
 });
