@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { providers, utils } from 'ethers';
 import useNetwork from '../hooks/useNetwork';
+import Error from '../components/Error';
 import Title from '../components/Title';
 import NetworkInfo from '../components/NetworkInfo';
 
@@ -48,21 +49,11 @@ const Home = () => {
     web3,
   };
 
-  const renderErrorSection = () => (
-    <div
-      className="text-center p-3 text-danger"
-      aria-live="assertive"
-      aria-atomic="true"
-    >
-      {errorMessage}
-    </div>
-  );
-
   return (
     <div className="text-center">
       <Title />
       <NetworkInfo {...propsNetworkInfo} />
-      {renderErrorSection()}
+      <Error errorMessage={errorMessage} />
     </div>
   );
 };
