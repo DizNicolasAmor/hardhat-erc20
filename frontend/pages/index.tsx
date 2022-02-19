@@ -3,7 +3,7 @@ import { providers, utils } from 'ethers';
 import useNetwork from '../hooks/useNetwork';
 import Error from '../components/Error';
 import Title from '../components/Title';
-import NetworkInfo from '../components/NetworkInfo';
+import NetworkSection from '../components/NetworkSection';
 
 const Home = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -41,18 +41,41 @@ const Home = () => {
     handleNetwork().catch(setErrorMessage);
   };
 
-  const propsNetworkInfo = {
+  const handleGetBalance = async () => {
+    setErrorMessage('');
+    setIsLoadingToken(true);
+
+    try {
+      const fetchedTokenBalance = await getBalance(account);
+      setTokenBalance(utils.formatEther(fetchedTokenBalance));
+      setIsLoadingToken(false);
+    } catch (reason) {
+      console.error(reason);
+      setErrorMessage('Error when fetching contract');
+      setIsLoadingToken(false);
+    }
+  };
+
+  const propsNetworkSection = {
     account,
     handleConnect,
     network,
     userBalance,
     web3,
   };
+  const propsTokenSection = {
+    account,
+    balance: tokenBalance,
+    contractAddress,
+    handleGetBalance,
+    isLoadingToken,
+  };
 
   return (
     <div className="text-center">
       <Title />
-      <NetworkInfo {...propsNetworkInfo} />
+      <NetworkSection {...propsNetworkSection} />
+      <TokenSection {...propsTokenSection} />
       <Error errorMessage={errorMessage} />
     </div>
   );

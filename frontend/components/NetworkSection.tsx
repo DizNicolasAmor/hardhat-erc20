@@ -2,7 +2,7 @@ import React from 'react';
 import { providers } from 'ethers';
 import { Button } from 'react-bootstrap';
 
-interface INetworkInfo {
+interface INetworkSection {
   account: string;
   handleConnect: () => void;
   network: providers.Network | undefined;
@@ -10,14 +10,16 @@ interface INetworkInfo {
   web3: providers.Web3Provider | undefined;
 }
 
-const NetworkInfo: React.FC<INetworkInfo> = ({
+const NetworkSection: React.FC<INetworkSection> = ({
   handleConnect,
   web3,
   network,
   account,
   userBalance,
 }) => (
-  <>
+  <section aria-labelledby="network-section">
+    <h2 id="network-section">Network section</h2>
+
     <Button className="m-3" variant="primary" onClick={handleConnect}>
       {web3 ? 'Disconnect' : 'Connect'}
     </Button>
@@ -32,11 +34,11 @@ const NetworkInfo: React.FC<INetworkInfo> = ({
         {account}
       </div>
       <div>
-        <strong>Balance:</strong>
+        <strong>Balance: </strong>
         {userBalance}
       </div>
     </div>
-  </>
+  </section>
 );
 
-export default NetworkInfo;
+export default NetworkSection;
