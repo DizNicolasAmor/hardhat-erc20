@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { providers, utils } from 'ethers';
 import useNetwork from '../hooks/useNetwork';
+import useToken from '../hooks/useToken';
 import Error from '../components/Error';
 import Title from '../components/Title';
 import NetworkSection from '../components/NetworkSection';
+import TokenSection from '../components/TokenSection';
 
 const Home = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoadingToken, setIsLoadingToken] = useState<boolean>(false);
   const [network, setNetwork] = useState<providers.Network>();
   const [account, setAccount] = useState<string>('');
+  const [tokenBalance, setTokenBalance] = useState<string>('');
   const [userBalance, setUserBalance] = useState<string>('');
 
   const [{ web3 }, handleNetwork] = useNetwork();
+  const [contractAddress, getBalance] = useToken({ web3 });
 
   useEffect(() => {
     if (typeof web3 === 'undefined') {
