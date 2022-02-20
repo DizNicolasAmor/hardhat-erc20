@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import CommonSpinner from './CommonSpinner';
 
 interface ITokenSection {
@@ -34,7 +34,10 @@ const TokenSection: React.FC<ITokenSection> = ({
       setAmountToSend(Number(event?.target?.value));
     }
   };
-  const handleSendToken = (): void => {
+  const handleSendToken = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void => {
+    event.preventDefault();
     // sendToken(receiverAddress, amountToSend);
   };
 
@@ -58,34 +61,38 @@ const TokenSection: React.FC<ITokenSection> = ({
           <CommonSpinner />
         ) : (
           <div>
-            <strong>Token balance: </strong>
+            <strong>Your token balance: </strong>
             {balance}
           </div>
         )}
       </div>
-      <div className="m-3">
-        <label htmlFor="receiver-address"></label>
-        <input
-          id="receiver-address"
-          onChange={handleReceiverAddress}
-          placeholder="Receiver address"
-          type="text"
-        />
-        <label htmlFor="amount-to-send"></label>
-        <input
-          id="amount-to-send"
-          onChange={handleAmountToSend}
-          placeholder="Amount to send"
-          type="number"
-        />
-        <Button
-          className="m-3"
-          variant="primary"
-          type="button"
-          onClick={handleSendToken}
-        >
-          Send token
-        </Button>
+      <div className="m-auto" style={{ maxWidth: '45rem' }}>
+        <Form>
+          <Form.Group className="mb-3" controlId="receiver-address">
+            <Form.Label>Receiver address</Form.Label>
+            <Form.Control
+              onChange={handleReceiverAddress}
+              placeholder=""
+              type="text"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="amount-to-send">
+            <Form.Label>Amount to send</Form.Label>
+            <Form.Control
+              onChange={handleAmountToSend}
+              placeholder=""
+              type="number"
+            />
+          </Form.Group>
+          <Button
+            className="m-3"
+            variant="primary"
+            type="submit"
+            onClick={handleSendToken}
+          >
+            Send token
+          </Button>
+        </Form>
       </div>
     </section>
   );
