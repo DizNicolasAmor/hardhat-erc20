@@ -8,6 +8,9 @@ interface ITokenSection {
   contractAddress: string;
   handleGetBalance: () => void;
   isLoadingToken: boolean;
+  sendToken: (receiverAddress: string, amountToSend: number) => void;
+  tokenName: string;
+  tokenSymbol: string;
 }
 
 const TokenSection: React.FC<ITokenSection> = ({
@@ -16,6 +19,9 @@ const TokenSection: React.FC<ITokenSection> = ({
   contractAddress,
   handleGetBalance,
   isLoadingToken,
+  sendToken,
+  tokenName,
+  tokenSymbol,
 }) => {
   const [receiverAddress, setReceiverAddressValue] = useState<string>('');
   const [amountToSend, setAmountToSend] = useState<number>(0);
@@ -38,7 +44,7 @@ const TokenSection: React.FC<ITokenSection> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void => {
     event.preventDefault();
-    // sendToken(receiverAddress, amountToSend);
+    sendToken(receiverAddress, amountToSend);
   };
 
   return (
@@ -57,12 +63,16 @@ const TokenSection: React.FC<ITokenSection> = ({
         <Button className="m-3" variant="secondary" onClick={handleGetBalance}>
           Get token balance
         </Button>
+        <div>
+          <strong>Token name: </strong>
+          {tokenName}
+        </div>
         {isLoadingToken ? (
           <CommonSpinner />
         ) : (
           <div>
             <strong>Your token balance: </strong>
-            {balance}
+            {`${balance} ${tokenSymbol}`}
           </div>
         )}
       </div>

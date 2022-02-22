@@ -13,10 +13,14 @@ const Home = () => {
   const [network, setNetwork] = useState<providers.Network>();
   const [account, setAccount] = useState<string>('');
   const [tokenBalance, setTokenBalance] = useState<string>('');
+  const [tokenName, setTokenName] = useState<string>('');
+  const [tokenSymbol, setTokenSymbol] = useState<string>('');
   const [userBalance, setUserBalance] = useState<string>('');
 
   const [{ web3 }, handleNetwork] = useNetwork();
-  const [contractAddress, getBalance] = useToken({ web3 });
+  const [contractAddress, getContractInformation, transferToken] = useToken({
+    web3,
+  });
 
   useEffect(() => {
     if (typeof web3 === 'undefined') {
@@ -51,12 +55,28 @@ const Home = () => {
     setIsLoadingToken(true);
 
     try {
-      const fetchedTokenBalance = await getBalance(account);
-      setTokenBalance(utils.formatEther(fetchedTokenBalance));
+      const { balance, name, symbol } = await getContractInformation();
+      setTokenBalance(utils.formatEther(balance));
+      setTokenName(name);
+      setTokenSymbol(symbol);
       setIsLoadingToken(false);
     } catch (reason) {
       console.error(reason);
       setErrorMessage('Error when fetching contract');
+      setIsLoadingToken(false);
+    }
+  };
+
+  const sendToken = async (receiverAddress: string, amountToSend: number) => {
+    setErrorMessage('');
+    setIsLoadingToken(true);
+
+    try {
+      await transferToken(receiverAddress, amountToSend);
+      setIsLoadingToken(false);
+    } catch (reason) {
+      console.error(reason);
+      setErrorMessage('Error when sending tokens');
       setIsLoadingToken(false);
     }
   };
@@ -74,6 +94,9 @@ const Home = () => {
     contractAddress,
     handleGetBalance,
     isLoadingToken,
+    sendToken,
+    tokenName,
+    tokenSymbol,
   };
 
   return (
