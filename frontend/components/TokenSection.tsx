@@ -24,7 +24,7 @@ const TokenSection: React.FC<ITokenSection> = ({
   tokenSymbol,
 }) => {
   const [receiverAddress, setReceiverAddressValue] = useState<string>('');
-  const [amountToSend, setAmountToSend] = useState<number>(0);
+  const [amountToSend, setAmountToSend] = useState<string>('');
 
   const handleReceiverAddress = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -37,7 +37,7 @@ const TokenSection: React.FC<ITokenSection> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     if (event?.target?.value) {
-      setAmountToSend(Number(event?.target?.value));
+      setAmountToSend(event?.target?.value);
     }
   };
   const handleSendToken = (

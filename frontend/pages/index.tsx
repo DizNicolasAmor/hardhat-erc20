@@ -67,7 +67,7 @@ const Home = () => {
     }
   };
 
-  const sendToken = async (receiverAddress: string, amountToSend: number) => {
+  const sendToken = async (receiverAddress: string, amountToSend: string) => {
     setErrorMessage('');
     setIsLoadingToken(true);
 

@@ -63,11 +63,12 @@ const useToken = ({ web3 }: Web3Props) => {
     }
   };
 
-  async function transferToken(receiverAddress: string, amountToSend: number) {
+  async function transferToken(receiverAddress: string, amountToSend: string) {
     if (!web3 || !receiverAddress || !amountToSend) return;
 
+    const parsedAmount = ethers.utils.parseUnits(amountToSend);
     const contract = await getContract(web3);
-    const transaction = await contract.transfer(receiverAddress, amountToSend);
+    const transaction = await contract.transfer(receiverAddress, parsedAmount);
     await transaction.wait();
   }
 
