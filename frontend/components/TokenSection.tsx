@@ -8,7 +8,7 @@ interface ITokenSection {
   contractAddress: string;
   handleGetBalance: () => void;
   isLoadingToken: boolean;
-  sendToken: (receiverAddress: string, amountToSend: number) => void;
+  sendToken: (receiverAddress: string, amountToSend: string) => void;
   tokenName: string;
   tokenSymbol: string;
 }
