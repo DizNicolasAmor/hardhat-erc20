@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import CommonSpinner from './CommonSpinner';
+import { renderSectionItem } from '../utils/utilFunctions';
 
 interface ITokenSection {
   account: string;
@@ -52,14 +53,9 @@ const TokenSection: React.FC<ITokenSection> = ({
       <h2 id="token-section">Token section</h2>
 
       <div className="m-3">
-        <div>
-          <strong>Contract address: </strong>
-          {contractAddress}
-        </div>
-        <div>
-          <strong>Your account: </strong>
-          {account}
-        </div>
+        {renderSectionItem('Contract address', contractAddress)}
+        {renderSectionItem('Your account', account)}
+
         <Button className="m-3" variant="secondary" onClick={handleGetBalance}>
           Get token balance
         </Button>

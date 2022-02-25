@@ -1,6 +1,7 @@
 import React from 'react';
 import { providers } from 'ethers';
 import { Button } from 'react-bootstrap';
+import { renderSectionItem } from '../utils/utilFunctions';
 
 interface INetworkSection {
   account: string;
@@ -25,18 +26,9 @@ const NetworkSection: React.FC<INetworkSection> = ({
     </Button>
 
     <div className="m-3">
-      <div>
-        <strong>Network: </strong>
-        {network?.chainId} {network?.name}
-      </div>
-      <div>
-        <strong>Address: </strong>
-        {account}
-      </div>
-      <div>
-        <strong>Balance: </strong>
-        {userBalance}
-      </div>
+      {renderSectionItem('Network', `${network?.chainId} ${network?.name}`)}
+      {renderSectionItem('Address', account)}
+      {renderSectionItem('Balance', userBalance)}
     </div>
   </section>
 );
